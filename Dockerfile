@@ -9,6 +9,7 @@ ENV NGINX_VERSION=1.13.8 \
 
 # Install required build packages
 RUN apk --no-cache add \
+        bash \
         ca-certificates \
         libuuid \
         apr \
@@ -23,19 +24,19 @@ RUN apk --no-cache add \
 # Install dev requirements
 RUN set -x && \
     apk --no-cache add -t .build-deps \
-        apache2-dev \
-        apr-dev \
-        apr-util-dev \
-        build-base \
-        curl \
-        icu-dev \
-        libjpeg-turbo-dev \
-        linux-headers \
-        gperf \
-        openssl-dev \
-        pcre-dev \
-        python \
-        zlib-dev && \
+          apache2-dev \
+          apr-dev \
+          apr-util-dev \
+          build-base \
+          curl \
+          icu-dev \
+          libjpeg-turbo-dev \
+          linux-headers \
+          gperf \
+          openssl-dev \
+          pcre-dev \
+          python \
+          zlib-dev && \
     # Add user and groups for nginx daemon
     addgroup -g 1000 -S www-data && \
     adduser -u 1000 -D -S -h /var/cache/ngx_pagespeed -s /sbin/nologin -G www-data www-data
@@ -49,8 +50,8 @@ RUN cd /tmp && \
 
 # Build PageSpeed
 RUN cd /tmp && \
-    curl -L https://dl.google.com/dl/linux/mod-pagespeed/tar/beta/mod-pagespeed-beta-${PAGESPEED_VERSION}-r0.tar.bz2 | tar -jx && \
-    curl -L https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}-beta.tar.gz | tar -zx && \
+    curl -L https://dl.google.com/dl/linux/mod-pagespeed/tar/stable/mod-pagespeed-stable-${PAGESPEED_VERSION}-r0.tar.bz2 | tar -jx && \
+    curl -L https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}-stable.tar.gz | tar -zx && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION} && \
     curl -L https://raw.githubusercontent.com/iler/alpine-nginx-pagespeed/master/patches/automatic_makefile.patch | patch -p1 && \
     curl -L https://raw.githubusercontent.com/iler/alpine-nginx-pagespeed/master/patches/libpng_cflags.patch | patch -p1 && \
@@ -62,16 +63,16 @@ RUN cd /tmp && \
     make BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed/automatic/ && \
     make psol BUILDTYPE=Release CXXFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" CFLAGS=" -I/usr/include/apr-1 -I/tmp/libpng-${LIBPNG_VERSION} -fPIC -D_GLIBCXX_USE_CXX11_ABI=0" && \
-    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol && \
-    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/lib/Release/linux/x64 && \
-    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/out/Release && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/out/Release/obj /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/out/Release/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/net /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/testing /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/third_party /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/tools /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/include/ && \
-    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed/automatic/pagespeed_automatic.a /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta/psol/lib/Release/linux/x64
+    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol && \
+    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/lib/Release/linux/x64 && \
+    mkdir -p /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/out/Release && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/out/Release/obj /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/out/Release/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/net /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/testing /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/third_party /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/tools /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/include/ && \
+    cp -r /tmp/modpagespeed-${PAGESPEED_VERSION}/src/pagespeed/automatic/pagespeed_automatic.a /tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable/psol/lib/Release/linux/x64
 
 # Build Nginx with support for PageSpeed
 RUN cd /tmp && \
@@ -103,7 +104,7 @@ RUN cd /tmp && \
         --http-log-path=/var/log/nginx/access.log \
         --error-log-path=/var/log/nginx/error.log \
         --pid-path=/var/run/nginx.pid \
-        --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION}-beta \
+        --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable \
         --with-cc-opt="-fPIC -I /usr/include/apr-1" \
         --with-ld-opt="-luuid -lapr-1 -laprutil-1 -licudata -licuuc -L/tmp/modpagespeed-${PAGESPEED_VERSION}/usr/lib -lpng12 -lturbojpeg -ljpeg" && \
     make -j${MAKE_J} install --silent
