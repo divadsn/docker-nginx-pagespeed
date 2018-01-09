@@ -4,8 +4,7 @@ MAINTAINER David Sn "divad.nnamtdeis@gmail.com"
 ENV NGINX_VERSION=1.12.2 \
     PAGESPEED_VERSION=1.12.34.3 \
     LIBPNG_VERSION=1.2.56 \
-    MAKE_J=4 \
-    PAGESPEED_ENABLE=on
+    MAKE_J=4
 
 # Install required build packages
 RUN apk --no-cache add \
@@ -123,12 +122,7 @@ RUN cd && \
 # Copy configuration files
 COPY config/conf.d /etc/nginx/conf.d
 COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY docker-entrypoint.sh /usr/local/bin/
-
-# Make entrypoint executable
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Open ports and start nginx
 EXPOSE 80 443
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
