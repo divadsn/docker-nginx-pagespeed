@@ -51,6 +51,7 @@ RUN cd /tmp && \
 RUN cd /tmp && \
     curl -L https://github.com/We-Amp/ngx-pagespeed-alpine/blob/master/mod-pagespeed-beta-1.12.34.3.tar.bz2?raw=true | tar -jx && \
     curl -L https://github.com/pagespeed/ngx_pagespeed/archive/v${PAGESPEED_VERSION}-stable.tar.gz | tar -zx && \
+    mv incubator-pagespeed-ngx-${PAGESPEED_VERSION}-stable/ ngx_pagespeed-${PAGESPEED_VERSION}-stable/ && \
     cd /tmp/modpagespeed-${PAGESPEED_VERSION} && \
     curl -L https://raw.githubusercontent.com/We-Amp/ngx-pagespeed-alpine/master/patches/automatic_makefile.patch | patch -p1 && \
     curl -L https://raw.githubusercontent.com/We-Amp/ngx-pagespeed-alpine/master/patches/libpng_cflags.patch | patch -p1 && \
