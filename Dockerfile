@@ -106,10 +106,9 @@ RUN set -x && \
         --add-module=/tmp/ngx_pagespeed-${PAGESPEED_VERSION}-stable \
         --with-cc-opt="-fPIC -I /usr/include/apr-1" \
         --with-ld-opt="-Wl,--start-group -luuid -lapr-1 -laprutil-1 -licudata -licuuc -lpng12 -lturbojpeg -ljpeg" && \
-    make install --silent -j$MAKE_J
-
-# Clean-up temporary files
-RUN cd && \
+    make install --silent -j$MAKE_J && \
+    # Clean-up temporary files
+    cd && \
     apk del .build-deps && \
     rm -rf /tmp/* && \
     # Forward request and error logs to docker log collector
