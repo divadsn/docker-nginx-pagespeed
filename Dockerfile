@@ -25,7 +25,6 @@ RUN set -x && \
         apr-util-dev \
         build-base \
         ca-certificates \
-        openssl-dev \
         curl \
         icu-dev \
         libjpeg-turbo-dev \
