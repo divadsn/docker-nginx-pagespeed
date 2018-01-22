@@ -25,6 +25,7 @@ RUN set -x && \
         apr-util-dev \
         build-base \
         ca-certificates \
+        openssl-dev \
         curl \
         icu-dev \
         libjpeg-turbo-dev \
@@ -39,7 +40,7 @@ RUN set -x && \
         zlib-dev && \
     # Add user and groups for nginx daemon
     addgroup -g 1000 -S www-data && \
-    adduser -u 1000 -D -S -h /var/cache/ngx_pagespeed -s /sbin/nologin -G www-data www-data && \
+    adduser -u 1000 -D -S -h /var/cache/nginx -s /sbin/nologin -G www-data www-data && \
     cd /tmp && \
     # Build libpng
     # This requires an older version from SourceForge, see: https://sourceforge.net/projects/libpng/files/
