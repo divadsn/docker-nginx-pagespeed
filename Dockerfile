@@ -29,6 +29,9 @@ RUN set -x && \
         icu-dev \
         libjpeg-turbo-dev \
         linux-headers \
+        libxslt-dev \
+        gd-dev \
+        geoip-dev \
         gperf \
         libressl-dev \
         pcre-dev \
